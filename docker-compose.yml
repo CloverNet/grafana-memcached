@@ -1,0 +1,72 @@
+version: '3'
+    
+services:
+    grafana:
+            build: ./grafana
+            container_name: grafana
+            ports:
+                - '3000:3000'
+            depends_on:
+                - prometheus
+    prometheus:
+            build: ./prometheus
+            container_name: prometheus
+            ports:
+                - '9090:9090'
+            depends_on:
+                - memcached-exporter1
+                - memcached-exporter2
+                - memcached-exporter3
+                - memcached-exporter4
+    memcached-exporter1:
+            image: prom/memcached-exporter:latest
+            container_name: localhost_memcached_1
+            command: '--memcached.address=memcached1:11211'
+            ports:
+                - '9150:9150'
+            depends_on:
+                - memcached1
+    memcached-exporter2:
+            image: prom/memcached-exporter:latest
+            container_name: localhost_memcached_2
+            command: '--memcached.address=memcached2:11211'
+            ports:
+                - '9250:9150'
+            depends_on:
+                - memcached2
+    memcached-exporter3:
+            image: prom/memcached-exporter:latest
+            container_name: localhost_memcached_3
+            command: '--memcached.address=memcached3:11211'
+            ports:
+                - '9350:9150'
+            depends_on:
+                - memcached3
+    memcached-exporter4:
+            image: prom/memcached-exporter:latest
+            container_name: localhost_memcached_4
+            command: '--memcached.address=memcached4:11211'
+            ports:
+                - '9450:9150'
+            depends_on:
+                - memcached4
+    memcached1:
+            image: memcached:latest
+            container_name: memcached_1
+            ports:
+                - '11211:11211'
+    memcached2:
+            image: memcached:latest
+            container_name: memcached_2
+            ports:
+                - '11212:11211'
+    memcached3:
+            image: memcached:latest
+            container_name: memcached_3
+            ports:
+                - '11213:11211'
+    memcached4:
+            image: memcached:latest
+            container_name: memcached_4
+            ports:
+                - '11214:11211'                
